@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Streaming</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h2 {
+            margin: 20px 0;
+        }
+
+        /* Estilos del carrusel */
+        .carousel {
+            width: 100%;
+            overflow: hidden;
+            margin: 20px 0;
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .carousel-container {
+            display: flex;
+            gap: 10px;
+            animation: slide 10s infinite linear;
+        }
+
+        .carousel img {
+            width: 120px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+        }
+
+        /* Sección de animes */
+        .anime-grid {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 10px;
+        }
+
+        .anime-grid a {
+            text-decoration: none;
+        }
+
+        .anime-grid img {
+            width: 100px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+            transition: transform 0.3s;
+        }
+
+        .anime-grid img:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .anime-grid img {
+                width: 80px;
+                height: 120px;
+            }
+            .carousel img {
+                width: 100px;
+                height: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Carrusel de inicio -->
+    <div class="carousel">
+        <div class="carousel-container">
+            <a href="novel1.html"><img src="novela1.png" alt="Takt Op Destiny"></a>
+            <a href="novela2.html"><img src="novela2.png" alt="black bullet"></a>
+            <a href="novela3.html"><img src="novela3.png" alt="Guild no uketsukejou desu ga"></a>
+        </div>
+    </div>
+
+    <!-- Sección de animes -->
+    <div class="anime-sections">
+        <section>
+            <h2>Novelas</h2>
+            <div class="anime-grid">
+                <a href="novela1.html"><img src="novela1.png" alt="solo leveling seanso 2"></a>
+                <a href="novela2.html"><img src="novela2.png" alt="guild no uketsukejou"></a>
+                <a href="novela3.html"><img src="novela3.png" alt="Arifureta seanso 3"></a>
+            </div>
+        </section>
+ <p> Puede que te guste </p>
+    <!-- Carrusel final -->
+    <div class="carousel">
+        <div class="carousel-container">
+            <a href="https://ej/anime13"><img src="manga1.jpeg" alt="Anime 13"></a>
+            <a href="https://ejemplo.com/anime14"><img src="novela1.png" alt="Anime 14"></a>
+            <a href="https://ejemplo.com/anime15"><img src="manga4.jpeg" alt="Anime 15"></a>
+        </div>
+    </div>
+
+</body>
+</html>
