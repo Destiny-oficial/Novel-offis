@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lector de PDF</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #pdf-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #canvas-container {
+            width: 24rem;
+            height: 24rem;
+            overflow: hidden;
+            border: 1px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #volumen-lista {
+            display: none;
+            position: absolute;
+            background: white;
+            border: 1px solid black;
+            list-style: none;
+            padding: 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        #volumen-lista li {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #ddd;
+        }
+        #volumen-lista li:hover {
+            background-color: #f0f0f0;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            position: relative;
+        }
+        header img {
+            height: 40px;
+        }
+        .menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .menu li {
+            margin: 0 10px;
+        }
+        .menu li a {
+            color: white;
+            text-decoration: none;
+        }
+        .menu-toggle {
+            font-size: 30px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+        <img src="offis.png" alt="Logo">
+        <ul class="menu">
+            <li><a href="index.html" id="juegos-link">INICIO</a></li>
+            <li><a href="#" id="agregar-link">Descargar la App</a></li>
+        </ul>
+        <button class="menu-toggle">&#9776;</button>
+    </header>
+
+    <h2>Lector de PDF Anime Offis</h2>
+    <h5>1LDK, Soshite 2JK novela ligera</h5>
+
+    <button id="volumen-btn">Seleccionar Volumen</button>
+    <ul id="volumen-lista"></ul>
+
+    <div id="pdf-container">
+        <div id="canvas-container">
+            <canvas id="pdf-canvas"></canvas>
+        </div>
+        <div>
+            <button id="prev-page">Anterior</button>
+            <span id="page-num">Página: 0</span>
+            <button id="next-page">Siguiente</button>
+        </div>
+    </div>
+
+    <script>
+        let pdfDoc = null;
+        let pageNum = 1;
+        let pdfCanvas = document.getElementById("pdf-canvas");
+        let ctx = pdfCanvas.getContext("2d");
+        let scale = 1.5;
+
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+        const volumenes = {
+            "Volumen 1": "novela1.pdf",
+            "Volumen 2": "novela1V2.pdf"
+        };
+
+        let volumenBtn = document.getElementById("volumen-btn");
+        let volumenLista = document.getElementById("volumen-lista");
+
+        volumenBtn.addEventListener("click", () => {
+            volumenLista.innerHTML = "";
+            volumenLista.style.display = volumenLista.style.display === "block" ? "none" : "block";
+
+            for (let volumen in volumenes) {
+                let li = document.createElement("li");
+                li.textContent = volumen;
+                li.onclick = () => {
+                    cargarPDF(volumenes[volumen]);
+                    volumenLista.style.display = "none";
+                };
+                volumenLista.appendChild(li);
+            }
+        });
+
+        function cargarPDF(pdfUrl) {
+            pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+                pdfDoc = pdf;
+                pageNum = 1;
+                renderPage(pageNum);
+            });
+        }
+
+        function renderPage(num) {
+            if (!pdfDoc) return;
+            pdfDoc.getPage(num).then(page => {
+                let viewport = page.getViewport({ scale: scale });
+                pdfCanvas.width = viewport.width;
+                pdfCanvas.height = viewport.height;
+
+                let renderContext = {
+                    canvasContext: ctx,
+                    viewport: viewport
+                };
+                page.render(renderContext);
+                document.getElementById("page-num").textContent = `Página: ${num} / ${pdfDoc.numPages}`;
+            });
+        }
+
+        document.getElementById("prev-page").addEventListener("click", function () {
+            if (pdfDoc && pageNum > 1) {
+                pageNum--;
+                renderPage(pageNum);
+            }
+        });
+
+        document.getElementById("next-page").addEventListener("click", function () {
+            if (pdfDoc && pageNum < pdfDoc.numPages) {
+                pageNum++;
+                renderPage(pageNum);
+            }
+        });
+
+    </script>
+
+</body>
+</html>
